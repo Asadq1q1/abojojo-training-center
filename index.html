@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abo JoJo Training Center — Full Muscular System</title>
+<style>
+  :root{
+    --bg:#0b0e14; --panel:#141a26; --panel2:#1a2230; --line:#262e40;
+    --text:#e9edf5; --muted:#8b93a7; --muted2:#6b7386; --accent:#ff5347; --accent2:#f5a54a;
+    --thumbbg:#f4f5f7;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:radial-gradient(1200px 700px at 50% -10%, #171d2a 0%, var(--bg) 60%);
+    color:var(--text); font-family:"Segoe UI", Tahoma, system-ui, -apple-system, sans-serif; min-height:100vh;
+  }
+  /* moving background picture */
+  body::before{
+    content:""; position:fixed; inset:-40%; z-index:-1; pointer-events:none;
+    background:
+      radial-gradient(700px 520px at 18% 25%, rgba(255,83,71,.11), transparent 60%),
+      radial-gradient(820px 620px at 82% 68%, rgba(122,75,224,.11), transparent 60%),
+      radial-gradient(620px 460px at 60% 15%, rgba(245,165,74,.08), transparent 60%),
+      radial-gradient(720px 560px at 30% 85%, rgba(79,163,224,.09), transparent 60%);
+    animation:bgDrift 26s ease-in-out infinite alternate;
+  }
+  @keyframes bgDrift{
+    0%   { transform:translate(-3%,-2%) rotate(0deg)  scale(1);    }
+    50%  { transform:translate(2%,3%)   rotate(3deg)  scale(1.06); }
+    100% { transform:translate(4%,-3%)  rotate(-2deg) scale(1.1);   }
+  }
+  .ar{ font-family:"Segoe UI", Tahoma, Arial, sans-serif; }
+  [dir=rtl]{ unicode-bidi:isolate; }
+  header{ text-align:center; padding:20px 16px 8px; }
+  header h1{ font-size:25px; letter-spacing:.5px; }
+  header h1 span{ color:var(--accent); }
+  header p{ color:var(--muted); font-size:13px; margin-top:5px; }
+
+  .view-tabs{ display:flex; justify-content:center; gap:10px; margin:14px 0 4px; flex-wrap:wrap; }
+  .view-tab{
+    padding:9px 22px; border-radius:24px; font-size:14px; font-weight:600; cursor:pointer;
+    background:var(--panel); border:1px solid var(--line); color:var(--muted); transition:all .15s;
+  }
+  .view-tab:hover{ color:var(--text); border-color:#3a4356; }
+  .view-tab.active{ background:var(--accent); border-color:var(--accent); color:#fff; }
+  .view{ display:none; max-width:1460px; margin:10px auto 40px; padding:0 18px; }
+  .view.active{ display:block; }
+
+  /* ============ LIBRARY ============ */
+  .toolbar-top{ display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; margin:6px 0 2px; }
+  .count-line{ font-size:14px; color:#c3cbdc; }
+  .count-line b{ color:var(--text); }
+  .storage-note{ font-size:13px; color:var(--muted2); }
+  .controls{ display:flex; flex-direction:column; gap:8px; margin-bottom:14px; }
+  #search{
+    background:var(--panel); border:1px solid var(--line); color:var(--text);
+    border-radius:9px; padding:10px 14px; font-size:14px; outline:none; max-width:420px; width:100%;
+  }
+  #search:focus{ border-color:var(--accent); }
+  .chips{ display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+  .chips .chip{
+    font-size:11.5px; padding:5px 11px; border-radius:20px; cursor:pointer;
+    background:var(--panel); border:1px solid var(--line); color:var(--muted);
+    transition:all .15s; user-select:none;
+  }
+  .chip:hover{ color:var(--text); border-color:#3a4356; }
+  .chip.active{ background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
+  .chip.muscle.active{ background:#7a4be0; border-color:#7a4be0; }
+  .filter-label{ font-size:10px; letter-spacing:1.2px; color:#5d6474; text-transform:uppercase; margin-right:2px; }
+
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px; margin-top:14px; }
+  .card{
+    background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden;
+    cursor:pointer; transition:all .18s;
+  }
+  .card:hover{ border-color:#3d4a66; transform:translateY(-3px); box-shadow:0 8px 24px #00000055; }
+  .card .thumb{ background:var(--thumbbg); aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .card .thumb img{ width:100%; height:100%; object-fit:contain; }
+  .card .body{ padding:15px 16px 17px; }
+  .card .name{ font-size:15.5px; font-weight:700; line-height:1.35; }
+  .card .name-ar{ font-size:14px; color:#c3cbdc; margin-top:3px; }
+  .card .badge{
+    display:inline-block; margin-top:9px; font-size:12px; font-weight:600; padding:4px 12px;
+    border-radius:15px; background:#152c3c; color:#8ecbe8;
+  }
+  .card .tip{ margin-top:11px; font-size:13.5px; color:#b9c2d4; line-height:1.55; }
+  .card .meta{ margin-top:11px; font-size:12.5px; color:var(--muted2); }
+
+  /* ============ PLANNER ============ */
+  .plan-actions{ display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:12px; align-items:center; }
+  .week-label{ font-size:13px; color:var(--muted); background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:7px 16px; }
+  .action-btn{
+    padding:9px 18px; border-radius:10px; border:1px solid var(--line); background:var(--panel);
+    color:var(--text); font-size:13px; font-weight:600; cursor:pointer; transition:all .15s;
+  }
+  .action-btn:hover{ border-color:#4a546c; }
+  .action-btn.primary{ background:var(--accent); border-color:var(--accent); color:#fff; }
+  .action-btn.primary:hover{ filter:brightness(1.1); }
+
+  .days-bar{
+    display:flex; justify-content:center; gap:10px; flex-wrap:wrap;
+    background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:14px;
+  }
+  .day-btn{
+    display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;
+    padding:8px 12px 10px; border-radius:12px; border:1px solid transparent; transition:all .15s; background:none; color:var(--text);
+    min-width:78px;
+  }
+  .day-btn:hover{ background:var(--panel2); }
+  .day-btn .circle{
+    width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:15px; font-weight:700; background:var(--panel2); border:1px solid var(--line); position:relative;
+  }
+  .day-btn.selected .circle{ background:var(--accent); border-color:var(--accent); color:#fff; }
+  .day-btn.today .circle::after{
+    content:""; position:absolute; inset:-4px; border-radius:50%; border:2px solid var(--accent2);
+  }
+  .day-btn .dname{ font-size:12px; color:var(--muted); }
+  .day-btn.selected .dname{ color:var(--text); font-weight:600; }
+  .day-btn .dar{ font-size:12px; color:var(--muted2); }
+  .day-btn .dcount{ font-size:10.5px; color:var(--muted2); background:var(--panel2); border-radius:9px; padding:1px 7px; }
+
+  .day-banner{
+    display:flex; align-items:center; gap:16px; background:var(--panel);
+    border:1px solid var(--line); border-radius:14px; padding:18px 22px; margin-bottom:14px; flex-wrap:wrap;
+  }
+  .day-banner .icon{ font-size:42px; }
+  .day-banner .txt h3{ font-size:20px; }
+  .day-banner .txt h3 .ar{ color:var(--accent2); }
+  .day-banner .txt p{ font-size:13.5px; color:var(--muted); margin-top:4px; }
+  .focus-chips{ display:flex; flex-wrap:wrap; gap:6px; margin-left:auto; }
+  .focus-chips .chip{
+    font-size:11.5px; padding:5px 11px; border-radius:20px; cursor:pointer;
+    background:var(--panel2); border:1px solid var(--line); color:var(--muted); transition:all .15s;
+  }
+  .chip:hover{ color:var(--text); border-color:#3a4356; }
+  .chip.active{ background:#7a4be0; border-color:#7a4be0; color:#fff; font-weight:600; }
+  .add-ex-btn{
+    padding:9px 18px; border-radius:10px; border:none; background:var(--accent); color:#fff;
+    font-size:13.5px; font-weight:700; cursor:pointer; transition:all .15s;
+  }
+  .add-ex-btn:hover{ filter:brightness(1.1); }
+
+  /* stacked exercise card: area → gif → machine → sets */
+  .plan-ex{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:16px; margin-bottom:16px; display:flex; flex-direction:column; gap:12px; max-width:640px; margin-inline:auto;
+  }
+  .ex-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+  .area-line{ font-size:15px; font-weight:700; color:#8ecbe8; }
+  .area-line .sub{ display:block; font-size:12.5px; font-weight:500; color:var(--muted); margin-top:3px; }
+  .area-line .ar{ color:#8ecbe8; }
+  .del-ex{
+    background:none; border:1px solid var(--line); color:var(--muted);
+    border-radius:8px; padding:5px 10px; font-size:11.5px; cursor:pointer; flex:0 0 auto;
+  }
+  .del-ex:hover{ color:#ff6b60; border-color:#5c2a28; }
+  .gifbox{
+    background:var(--thumbbg); border-radius:12px; aspect-ratio:16/10; max-width:520px; width:100%;
+    margin-inline:auto; display:flex; align-items:center; justify-content:center; overflow:hidden;
+  }
+  .gifbox img{ width:100%; height:100%; object-fit:contain; }
+  .machine-line{ text-align:center; font-size:17px; font-weight:700; line-height:1.4; }
+  .machine-line .ar{ display:block; font-size:16px; color:#e9edf5; margin-top:2px; }
+  .mach-eq{ text-align:center; font-size:12px; color:var(--muted2); margin-top:-6px; }
+
+  .sets-box{ background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:10px; }
+  .sets-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .sets-head .lbl{ font-size:11px; letter-spacing:1.2px; color:var(--muted2); text-transform:uppercase; font-weight:700; }
+  .addset-btn{
+    background:none; border:1px solid var(--line); color:var(--muted); border-radius:7px;
+    padding:3px 10px; font-size:11.5px; cursor:pointer;
+  }
+  .addset-btn:hover{ color:var(--text); border-color:#4a546c; }
+  .set-row{
+    display:flex; align-items:center; gap:8px; padding:6px 0; border-top:1px solid #ffffff0a;
+  }
+  .set-row:first-of-type{ border-top:none; }
+  .set-num{ font-size:12.5px; color:var(--muted); width:44px; font-weight:600; }
+  .unit-tabs{ display:flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+  .utab{
+    background:none; border:none; color:var(--muted); font-size:11px; font-weight:700;
+    padding:6px 10px; cursor:pointer; letter-spacing:.5px;
+  }
+  .utab.active{ background:var(--accent); color:#fff; }
+  .set-row input[type=number]{
+    width:92px; background:var(--panel); border:1px solid var(--line); color:var(--text);
+    border-radius:8px; padding:7px 10px; font-size:13.5px; outline:none; text-align:center;
+  }
+  .set-row input[type=number]:focus{ border-color:var(--accent); }
+  .equiv{
+    min-width:74px; text-align:center; background:var(--panel); border:1px dashed var(--line);
+    border-radius:8px; padding:7px 8px; font-size:13.5px; color:var(--accent2); font-weight:700;
+  }
+  .equiv small{ display:block; font-size:9px; color:var(--muted2); font-weight:600; letter-spacing:.8px; }
+  .del-set{ background:none; border:none; color:var(--muted2); font-size:13px; cursor:pointer; padding:4px; }
+  .del-set:hover{ color:#ff6b60; }
+
+  .note-box{ background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:10px; }
+  .note-box .lbl{ font-size:11px; letter-spacing:1.2px; color:var(--muted2); text-transform:uppercase; font-weight:700; margin-bottom:7px; }
+  .note-box textarea{
+    width:100%; background:var(--panel); border:1px solid var(--line); color:var(--text);
+    border-radius:8px; padding:8px 11px; font-size:13px; outline:none; resize:vertical; min-height:44px;
+    font-family:inherit;
+  }
+  .note-box textarea:focus{ border-color:var(--accent); }
+  .photo-row{ display:flex; align-items:center; gap:10px; margin-top:8px; flex-wrap:wrap; }
+  .photo-btn{
+    background:none; border:1px solid var(--line); color:var(--muted); border-radius:8px;
+    padding:5px 12px; font-size:12px; cursor:pointer;
+  }
+  .photo-btn:hover{ color:var(--text); border-color:#4a546c; }
+  .photo-thumb{ position:relative; }
+  .photo-thumb img{ width:74px; height:74px; object-fit:cover; border-radius:8px; border:1px solid var(--line); }
+  .photo-thumb .rm{
+    position:absolute; top:-7px; right:-7px; width:22px; height:22px; border-radius:50%;
+    background:#3a1512; color:#ff6b60; border:1px solid #5c2a28; font-size:11px; cursor:pointer;
+  }
+
+  /* ============ SUMMARY ============ */
+  .sum-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
+  .sum-week{ font-size:18px; font-weight:700; }
+  .sum-week .ar{ color:var(--accent2); }
+  .sum-day{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:14px;
+  }
+  .sum-day h3{ font-size:17px; }
+  .sum-day h3 .ar{ color:var(--accent2); }
+  .sum-day .focus-line{ font-size:13px; color:var(--muted); margin-top:3px; }
+  .sum-ex{ display:flex; gap:12px; padding:10px 0; border-top:1px solid var(--line); flex-wrap:wrap; }
+  .sum-ex:first-of-type{ border-top:none; }
+  .sum-ex .sthumb{ width:74px; height:74px; background:var(--thumbbg); border-radius:8px; overflow:hidden; flex:0 0 auto; }
+  .sum-ex .sthumb img{ width:100%; height:100%; object-fit:contain; }
+  .sum-ex .sinfo{ flex:1; min-width:220px; }
+  .sum-ex .sname{ font-size:14px; font-weight:700; }
+  .sum-ex .sname-ar{ font-size:13.5px; color:#c3cbdc; }
+  .sum-sets{ display:flex; flex-wrap:wrap; gap:6px; margin-top:7px; }
+  .sum-set{
+    font-size:11.5px; background:var(--panel2); border:1px solid var(--line); border-radius:14px; padding:3px 10px; color:#c3cbdc;
+  }
+  .sum-note{ margin-top:8px; font-size:12.5px; color:var(--muted); font-style:italic; }
+  .sum-note-photo{ margin-top:8px; }
+  .sum-note-photo img{ max-width:120px; border-radius:8px; border:1px solid var(--line); }
+  .sum-rest{ color:var(--muted); font-size:13px; padding:8px 0; }
+
+  /* ============ MODALS & TOAST ============ */
+  .overlay{
+    position:fixed; inset:0; background:#05070bdf; backdrop-filter:blur(3px);
+    display:none; align-items:flex-start; justify-content:center; z-index:50; overflow-y:auto; padding:40px 16px;
+  }
+  .overlay.open{ display:flex; }
+  .modal{
+    background:var(--panel); border:1px solid var(--line); border-radius:16px;
+    width:min(880px,100%); padding:22px; position:relative; animation:pop .18s ease;
+  }
+  @keyframes pop{ from{ transform:scale(.96); opacity:0; } to{ transform:scale(1); opacity:1; } }
+  .modal .close-x{
+    position:absolute; top:14px; right:14px; width:34px; height:34px; border-radius:50%;
+    background:var(--panel2); border:1px solid var(--line); color:var(--muted); font-size:15px; cursor:pointer;
+  }
+  .modal .close-x:hover{ color:#fff; background:#3a1512; }
+  .detail-grid{ display:flex; gap:22px; flex-wrap:wrap; }
+  .detail-grid .big-thumb{
+    flex:0 0 340px; max-width:100%; background:var(--thumbbg); border-radius:12px;
+    aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; overflow:hidden;
+  }
+  .detail-grid .big-thumb img{ width:100%; height:100%; object-fit:contain; }
+  .detail-info{ flex:1; min-width:260px; }
+  .detail-info h3{ font-size:20px; margin-bottom:2px; }
+  .detail-info .name-ar{ font-size:16px; color:var(--accent2); margin-bottom:6px; }
+  .section{ margin-top:14px; }
+  .section .lbl{ font-size:10.5px; text-transform:uppercase; letter-spacing:1.4px; color:var(--muted); margin-bottom:6px; }
+  .m-chip{
+    display:inline-flex; align-items:center; gap:6px; font-size:12px; padding:5px 10px;
+    border-radius:16px; background:var(--panel2); border:1px solid var(--line); margin:0 6px 6px 0;
+  }
+  .m-chip i{ width:9px; height:9px; border-radius:50%; }
+  .m-chip.p i{ background:var(--accent); } .m-chip.s i{ background:var(--accent2); }
+  .eq-chip{
+    display:inline-flex; align-items:center; gap:6px; font-size:12px; padding:5px 10px;
+    border-radius:16px; background:var(--panel2); border:1px solid var(--line); margin:0 6px 6px 0;
+  }
+  .eq-chip i{ width:9px; height:9px; border-radius:50%; }
+  .addfromdetail{
+    margin-top:16px; width:100%; padding:11px; border:none; border-radius:10px;
+    background:var(--accent); color:#fff; font-size:14px; font-weight:700; cursor:pointer;
+  }
+  .badge{ display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.5px; padding:3px 9px; border-radius:12px; margin:6px 0 4px; }
+  .badge.beg{ background:#123527; color:#4ecb8f; } .badge.int{ background:#392a12; color:#f5a54a; } .badge.adv{ background:#3a1512; color:#ff6b60; }
+
+  .picker-search{
+    width:100%; background:var(--panel2); border:1px solid var(--line); color:var(--text);
+    border-radius:9px; padding:10px 14px; font-size:14px; outline:none; margin-bottom:14px;
+  }
+  .picker-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; max-height:60vh; overflow-y:auto; padding-right:6px;}
+  .picker-card{
+    background:var(--panel2); border:1px solid var(--line); border-radius:10px; overflow:hidden;
+    cursor:pointer; transition:all .15s;
+  }
+  .picker-card:hover{ border-color:var(--accent); }
+  .picker-card.added{ border-color:#4ecb8f; }
+  .picker-card .pt{ background:var(--thumbbg); aspect-ratio:1/1; }
+  .picker-card .pt img{ width:100%; height:100%; object-fit:contain; }
+  .picker-card .pn{ padding:8px 10px 2px; font-size:11.5px; font-weight:600; line-height:1.3; }
+  .picker-card .pn-ar{ padding:0 10px; font-size:11px; color:#c3cbdc; }
+  .picker-card .padd{ display:block; text-align:center; font-size:10.5px; color:var(--muted2); padding:4px 0 8px; }
+  .picker-card.added .padd{ color:#4ecb8f; }
+
+  #toast{
+    position:fixed; bottom:26px; left:50%; transform:translateX(-50%) translateY(80px);
+    background:#1d2534; border:1px solid var(--line); color:var(--text); font-size:13.5px;
+    padding:11px 20px; border-radius:12px; z-index:99; transition:transform .25s; box-shadow:0 8px 30px #000a;
+  }
+  #toast.show{ transform:translateX(-50%) translateY(0); }
+
+  @media (max-width:760px){
+    .grid{ grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); }
+  }
+
+  /* ============ PRINT ============ */
+  @media print{
+    @page{ margin:12mm; }
+    body{ background:#fff !important; color:#000; }
+    header p, .view-tabs, .days-bar, .plan-actions .action-btn, .toolbar, .toolbar-top .storage-note,
+    .controls, .add-ex-btn, .focus-chips, .del-ex, .addset-btn, .del-set, .photo-btn, .unit-tabs, .close-x{ display:none !important; }
+    .view{ display:none !important; }
+    .view.active{ display:block !important; }
+    .panel, .sum-day, .plan-ex, .sets-box, .note-box{ background:#fff !important; border-color:#bbb !important; box-shadow:none; }
+    .sum-day, .plan-ex{ break-inside:avoid; }
+    .count-line, .storage-note, .txt p, .tip, .meta, .mus-line{ color:#444 !important; }
+    .card .thumb, .gifbox, .sthumb{ background:#fff !important; }
+    .equiv{ border-color:#999 !important; color:#000 !important; }
+    #toast{ display:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>ABO JOJO <span>TRAINING CENTER</span></h1>
+  <p>Full Muscular System · <span class="ar" dir="rtl">نظام العضلات الكامل</span> — مكتبة التمارين ومخطط الأسبوع · Your offline exercise library and weekly planner.</p>
+  <div class="view-tabs">
+    <div class="view-tab active" data-view="library">📚 Exercise Library · المكتبة</div>
+    <div class="view-tab" data-view="plan">🗓 My Weekly Plan · خطتي الأسبوعية</div>
+    <div class="view-tab" data-view="summary">🖨 Weekly Summary · الملخص الأسبوعي</div>
+  </div>
+</header>
+
+<!-- ================= LIBRARY VIEW ================= -->
+<div class="view active" id="libraryView">
+  <div class="toolbar-top">
+    <div class="count-line" id="countLine"></div>
+    <div class="storage-note">All GIFs are stored in this folder — no internet required.</div>
+  </div>
+  <div class="controls">
+    <input id="search" type="text" placeholder="Search exercises… · ابحث عن تمرين…">
+    <div class="chips" id="muscleChips"></div>
+    <div class="chips" id="groupChips"></div>
+    <div class="chips" id="eqChips"></div>
+  </div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<!-- ================= PLANNER VIEW ================= -->
+<div class="view" id="planView">
+  <div class="plan-actions">
+    <span class="week-label" id="weekLabel"></span>
+    <button class="action-btn primary" id="addExBtn2" onclick="openPicker()">＋ Add exercises · إضافة تمارين</button>
+    <button class="action-btn" onclick="copyLastWeek()">📋 Copy last week's plan · نسخ خطة الأسبوع الماضي</button>
+  </div>
+  <div class="days-bar" id="daysBar"></div>
+  <div class="day-banner" id="dayBanner"></div>
+  <div id="dayExercises"></div>
+</div>
+
+<!-- ================= SUMMARY VIEW ================= -->
+<div class="view" id="summaryView">
+  <div class="sum-head">
+    <div class="sum-week" id="sumWeek"></div>
+    <button class="action-btn primary" onclick="window.print()">🖨 Print · طباعة</button>
+  </div>
+  <div id="summaryBody"></div>
+</div>
+
+<!-- detail modal -->
+<div class="overlay" id="detailOverlay">
+  <div class="modal">
+    <button class="close-x" onclick="closeModal('detailOverlay')">✕</button>
+    <div id="detailBody"></div>
+  </div>
+</div>
+
+<!-- exercise picker modal -->
+<div class="overlay" id="pickerOverlay">
+  <div class="modal">
+    <button class="close-x" onclick="closeModal('pickerOverlay')">✕</button>
+    <h3 style="margin-bottom:12px">➕ Add exercises to · إضافة تمارين إلى <span id="pickerDayName"></span></h3>
+    <input class="picker-search" id="pickerSearch" type="text" placeholder="Search… · ابحث…">
+    <div class="picker-grid" id="pickerGrid"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ================= GIF META (w,h,frames) ================= */
+const GIFMETA = {"10301301-Lever-Pec-Deck-Fly_Chest_720":[720,720,12],"Ab-Coaster-Machine":[360,360,12],"Ab-Roller-Crunch":[360,360,12],"Asisted-Triceps-Dips":[360,360,13],"Assault-Air-Runner":[360,360,24],"Assault-AirBike":[360,360,12],"Assisted-Chest-Dip":[360,360,12],"Assisted-Pull-up":[360,360,12],"Bench-Press-Machine-Standing-Calf-Raise":[360,360,12],"Bench-Side-Bend":[360,360,12],"Bike":[360,360,12],"Captains-Chair-Leg-Raise":[360,360,12],"Chest-Dips":[360,360,12],"Chest-Press-Machine":[360,360,12],"Close-Grip-Chin-Up":[360,360,12],"Decline-Chest-Press-Machine":[360,360,13],"Dip-Shrugs":[360,360,12],"Donkey-Kick-on-Leg-Extension-Machine":[360,360,12],"Donkey-Kick-on-Smith-Machine":[360,360,12],"Elliptical-Machine":[360,360,13],"Front-Pulldown":[360,360,12],"Full-Crunch-Machine":[360,360,12],"Glute-Kickback-Machine":[360,360,12],"HIP-ADDUCTION-MACHINE":[360,360,12],"Hack-Machine-One-Leg-Calf-Raise":[360,360,12],"Hack-Squat-Calf-Raise":[360,360,12],"Hand-Gripper":[360,360,12],"Hands-Bike":[360,360,12],"HiP-ABDUCTION-MACHINE":[360,360,13],"Hip-Thrust-Machine":[360,360,12],"Hip-Thrust-on-The-Leg-Extension-Machine":[360,360,12],"Incline-Chest-Fly-Machine":[360,360,12],"Incline-Chest-Press-Machine":[360,360,12],"Incline-Treadmill":[360,360,24],"Inner-Chest-Press-Machine":[360,360,12],"LEG-EXTENSION":[360,360,12],"Lateral-Raise-Machine":[360,360,12],"Leg-Curl":[360,360,12],"Leg-Press-Calf-Raise":[360,360,12],"Leg-Press":[360,360,12],"Lever-Assisted-Leg-Press":[360,360,12],"Lever-Biceps-Curl":[360,360,12],"Lever-Cable-Rear-Pulldown":[360,360,12],"Lever-Chest-Press":[360,360,12],"Lever-Crossovers":[360,360,12],"Lever-Deadlift":[360,360,12],"Lever-Decline-Chest-Press":[360,360,12],"Lever-Donkey-Calf-Raise":[360,360,12],"Lever-Gripless-Shrug":[360,360,12],"Lever-High-Row":[360,360,12],"Lever-Horizontal-Leg-Press":[360,360,12],"Lever-Incline-Chest-Press":[360,360,12],"Lever-Incline-Hammer-Chest-Press":[360,360,12],"Lever-Kneeling-Leg-Curl-":[360,360,12],"Lever-Lateral-Raise":[360,360,13],"Lever-Lying-Crunch":[360,360,12],"Lever-Neck-Extension-plate-loaded":[360,360,12],"Lever-Neck-Right-Side-Flexion-plate-loaded":[360,360,12],"Lever-One-Arm-Chest-Press":[360,360,12],"Lever-Overhand-Triceps-Dip":[360,360,12],"Lever-Preacher-Curl":[360,360,12],"Lever-Pullover-plate-loaded":[360,360,13],"Lever-Reverse-Shoulder-Press":[360,360,12],"Lever-Reverse-T-Bar-Row":[360,360,12],"Lever-Seated-Calf-Raise":[360,360,12],"Lever-Seated-Twist":[360,360,12],"Lever-Shoulder-Press-Hammer-Grip":[360,360,12],"Lever-Shoulder-Press":[360,360,13],"Lever-Shrug":[360,360,12],"Lever-Side-Hip-Abduction":[360,360,12],"Lever-Side-Hip-Adduction":[360,360,12],"Lever-Single-Leg-Curl":[360,360,12],"Lever-Standing-Hip-Extension":[360,360,12],"Lever-Standing-Leg-Raise":[360,360,12],"Lever-Standing-Rear-Kick":[360,360,12],"Lever-T-bar-Row":[360,360,12],"Lever-Tricep-Extension":[360,360,12],"Lying-Chest-Press-Machine":[360,360,12],"Nordic-Hamstring-Curl":[360,360,12],"Pec-Deck-Fly":[360,360,12],"Pendulum-Squat":[500,321,13],"Plate-Loaded-Seated-Row":[360,360,12],"Plate-Loaded-Shoulder-Press":[360,360,12],"Rear-Delt-Machine-Flys":[360,360,12],"Recumbent-Exercise-Bike":[360,360,12],"Reverse-Grip-Machine-Row":[360,360,12],"Reverse-Hack-Squat":[360,360,12],"Reverse-Hyperextension-Machine":[360,360,12],"Reverse-grip-Pull-up":[360,360,12],"Rowing-Machine":[360,360,24],"Seated-Ab-Crunch-Machine":[360,360,12],"Seated-Calf-Press-on-Leg-Press-Machine":[360,360,12],"Seated-Crunch-Machine":[360,360,12],"Seated-Leg-Curl":[360,360,12],"Seated-Row-Machine":[360,360,12],"Single-Calf-Raise-on-Leg-Press-Machine":[360,360,12],"Single-Leg-Extension":[360,360,12],"Single-Leg-Press":[360,360,12],"Ski-Ergometer":[360,360,18],"Sled-Hack-Squat":[360,360,12],"Smith-Machine-Behind-Neck-Press":[360,360,12],"Smith-Machine-Bench-Press":[360,360,12],"Smith-Machine-Bent-Over-Row":[360,360,12],"Smith-Machine-Decline-Bench-Press":[360,360,13],"Smith-Machine-Good-Morning":[360,360,12],"Smith-Machine-Hex-Press":[360,360,12],"Smith-Machine-Hip-Thrust":[360,360,12],"Smith-Machine-Incline-Bench-Press":[360,360,12],"Smith-Machine-Leg-Press":[360,360,12],"Smith-Machine-Lunge":[360,360,12],"Smith-Machine-Reverse-Kickback":[360,360,12],"Smith-Machine-Shoulder-Press":[360,360,12],"Squat-on-The-Abductor-Machine":[360,360,13],"Standing-Single-Leg-Curl-Machine":[360,360,12],"Standing-Smith-Machine-Shoulder-Press":[360,360,12],"Standing-Twist-Machine":[360,360,12],"Stationary-Bike-Run":[360,360,12],"Treadmill-":[360,360,12],"Triceps-Dip-Machine":[360,360,12],"Triceps-Dips":[360,360,12],"Triceps-Extension-Machine":[360,360,12],"Twisting-Hyperextension":[360,360,12],"Vibrate-Plate-Standing":[360,360,12],"Walk-Wave-Machine":[360,360,12],"Walking-on-Stepmill":[360,360,12],"Weighted-Back-Extension":[360,360,12],"Weighted-Pull-up":[360,360,12],"belt-squat":[360,360,12],"seated-back-extension":[360,360,12],"smith-machine-shrug":[360,360,12],"smith-machine-squat":[360,360,9]};
+
+/* ================= BILINGUAL DATA ================= */
+const MUSCLES = {
+  pectorals:  { en:"Pectorals (Chest)",      ar:"الصدر",              desc:"Pressing power — pushes the arms forward across the body." },
+  deltoids:   { en:"Deltoids (Shoulders)",    ar:"الكتف",              desc:"Lifts and presses the arm in all directions — front, side, rear heads." },
+  biceps:     { en:"Biceps",                  ar:"البايسبس",           desc:"Bends the elbow and rotates the forearm palm-up." },
+  triceps:    { en:"Triceps",                 ar:"الترايسبس",          desc:"Straightens the elbow — three heads on the back of the arm." },
+  forearms:   { en:"Forearms",                ar:"الساعدان",           desc:"Grip strength plus wrist flexion and extension." },
+  abs:        { en:"Rectus Abdominis (Abs)",  ar:"البطن",              desc:"Flexes the trunk and braces the spine under load." },
+  obliques:   { en:"Obliques",                ar:"الجانبية",           desc:"Rotates and side-bends the trunk; resists rotation." },
+  quadriceps: { en:"Quadriceps",              ar:"الفخذ الأمامي",      desc:"Straightens the knee — the body's biggest muscle group." },
+  hamstrings: { en:"Hamstrings",              ar:"الفخذ الخلفي",       desc:"Bends the knee and extends the hip; sprint power." },
+  glutes:     { en:"Glutes",                  ar:"الألوية",            desc:"Extends the hip — the engine of squatting, lifting and running." },
+  calves:     { en:"Calves (Gastrocnemius)",  ar:"السمانة",            desc:"Points the foot; jumping and sprinting power." },
+  lats:       { en:"Lats (Latissimus Dorsi)", ar:"الظهرية العريضة",    desc:"Pulls the arms down and back — the 'wings' of the back." },
+  traps:      { en:"Traps (Trapezius)",       ar:"الشبه منحرفة",       desc:"Shrugs and retracts the shoulder blades; supports the neck." },
+  lowerback:  { en:"Lower Back",              ar:"أسفل الظهر",         desc:"Keeps the spine upright and extended under load." },
+  adductors:  { en:"Adductors (Inner Thigh)", ar:"الفخذ الداخلي",      desc:"Pulls the legs toward the midline; stabilises the squat." },
+};
+const TIPS = {
+  pectorals:"Keep wrists aligned and use a controlled range without forcing a deep stretch.",
+  deltoids:"Lead with the elbows and keep the motion strict — no body swing.",
+  biceps:"Pin the elbows to the sides and curl without swinging.",
+  triceps:"Keep the upper arms locked in place and fully extend without snapping the elbows.",
+  forearms:"Squeeze hard and control the tempo on every rep.",
+  abs:"Brace gently and move under control without using momentum.",
+  obliques:"Rotate from the trunk, not the arms, and keep the movement smooth.",
+  quadriceps:"Push through the whole foot and keep the knees tracking over the toes.",
+  hamstrings:"Load the hamstrings with a slow stretch, then squeeze back up.",
+  glutes:"Drive through the heels and squeeze hard at the top of every rep.",
+  calves:"Full stretch at the bottom, up onto the toes at the top — no bouncing.",
+  lats:"Drive the elbows down and back; keep the chest tall.",
+  traps:"Shrug straight up, pause briefly, and lower under control.",
+  lowerback:"Keep the spine neutral and brace the core throughout.",
+  adductors:"Move slow and controlled; feel the stretch at the widest point.",
+};
+const GROUP_AR = {
+  "Chest":"الصدر","Shoulders":"الأكتاف","Back":"الظهر","Biceps":"البايسبس","Triceps":"الترايسبس",
+  "Forearms":"الساعدان","Core":"الجذع","Quads":"الفخذ الأمامي","Hamstrings":"الفخذ الخلفي",
+  "Glutes":"الألوية","Calves":"السمانة","Adductors":"الفخذ الداخلي","Neck":"الرقبة","Cardio":"الكارديو"
+};
+const EQ = {
+  "Machine":     { ar:"آلة" },
+  "Cardio Machine":{ ar:"جهاز كارديو" },
+  "Bodyweight":  { ar:"وزن الجسم" },
+  "Pull-up Bar": { ar:"عقلة" },
+  "Dip Station": { ar:"متوازي" },
+  "Bench":       { ar:"بنش" },
+  "Hand Gripper":{ ar:"قابض اليد" },
+  "Abs Roller":  { ar:"عجلة البطن" },
+};
+const EQ_COLORS = {
+  "Machine":"#4fa3e0","Cardio Machine":"#4ecb8f","Bodyweight":"#55c07a","Pull-up Bar":"#55c0c0",
+  "Dip Station":"#c05aa0","Bench":"#d07a4a","Hand Gripper":"#e0a53f","Abs Roller":"#9a6fe0"
+};
+const GROUPS = Object.keys(GROUP_AR);
+
+const E = (id,name,ar,group,p,s,eq,d)=>({id,name,ar,group,primary:p,secondary:s,equipment:eq,diff:d});
+const M="Machine", C="Cardio Machine";
+const EXERCISES = [
+  E("10301301-Lever-Pec-Deck-Fly_Chest_720","Lever Pec Deck Fly","تفتيح الصدر بالآلة","Chest",["pectorals"],["deltoids"],[M],"Beginner"),
+  E("Ab-Coaster-Machine","Ab Coaster Machine","جهاز البطن المنزلق","Core",["abs"],["obliques"],[M],"Beginner"),
+  E("Ab-Roller-Crunch","Ab Roller Crunch","تجعيد البطن بعجلة البطن","Core",["abs"],["obliques"],["Abs Roller"],"Beginner"),
+  E("Asisted-Triceps-Dips","Assisted Triceps Dips","متوازي الترايسبس بالمُساعدة","Triceps",["triceps"],["pectorals","deltoids"],[M],"Beginner"),
+  E("Assault-Air-Runner","Assault Air Runner","جهاز الجري الهوائي","Cardio",["quadriceps","calves"],["glutes","hamstrings","abs"],[C],"Intermediate"),
+  E("Assault-AirBike","Assault Air Bike","دراجة الهواء","Cardio",["quadriceps","calves"],["forearms","abs","glutes"],[C],"Intermediate"),
+  E("Assisted-Chest-Dip","Assisted Chest Dip","متوازي الصدر بالمُساعدة","Chest",["pectorals"],["triceps","deltoids"],[M],"Beginner"),
+  E("Assisted-Pull-up","Assisted Pull-Up","العقلة بالمُساعدة","Back",["lats"],["biceps","traps"],[M],"Beginner"),
+  E("Bench-Press-Machine-Standing-Calf-Raise","Standing Calf Raise (Bench Press Machine)","رفع السمانة واقفاً (جهاز البنش)","Calves",["calves"],["quadriceps"],[M],"Beginner"),
+  E("Bench-Side-Bend","Bench Side Bend","الميل الجانبي على البنش","Core",["obliques"],["abs"],["Bench"],"Beginner"),
+  E("Bike","Exercise Bike","الدراجة الثابتة","Cardio",["quadriceps"],["calves","glutes"],[C],"Beginner"),
+  E("Captains-Chair-Leg-Raise","Captain's Chair Leg Raise","رفع الأرجل بكرسي القبطان","Core",["abs"],["obliques","forearms"],[M],"Beginner"),
+  E("Chest-Dips","Chest Dips","متوازي الصدر","Chest",["pectorals"],["triceps","deltoids"],["Dip Station","Bodyweight"],"Intermediate"),
+  E("Chest-Press-Machine","Chest Press Machine","آلة الضغط الصدري","Chest",["pectorals"],["triceps","deltoids"],[M],"Beginner"),
+  E("Close-Grip-Chin-Up","Close-Grip Chin-Up","العقلة بقبضة ضيقة","Biceps",["biceps"],["lats","traps"],["Pull-up Bar","Bodyweight"],"Intermediate"),
+  E("Decline-Chest-Press-Machine","Decline Chest Press Machine","آلة الضغط الصدري المنحدر","Chest",["pectorals"],["triceps","deltoids"],[M],"Beginner"),
+  E("Dip-Shrugs","Dip Shrugs","هزّة الكتف بالمتوازي","Shoulders",["traps"],["deltoids"],["Dip Station","Bodyweight"],"Beginner"),
+  E("Donkey-Kick-on-Leg-Extension-Machine","Donkey Kick (Leg Extension Machine)","الرفصة الخلفية (جهاز فرد الساق)","Glutes",["glutes"],["hamstrings"],[M],"Beginner"),
+  E("Donkey-Kick-on-Smith-Machine","Donkey Kick (Smith Machine)","الرفصة الخلفية (آلة سميث)","Glutes",["glutes"],["hamstrings"],[M],"Beginner"),
+  E("Elliptical-Machine","Elliptical Machine","جهاز المشي الإهليلجي","Cardio",["quadriceps","calves"],["glutes","hamstrings","abs"],[C],"Beginner"),
+  E("Front-Pulldown","Front Pulldown","السحب الأمامي","Back",["lats"],["biceps","traps"],[M],"Beginner"),
+  E("Full-Crunch-Machine","Full Crunch Machine","آلة تجعيد البطن الكامل","Core",["abs"],["obliques"],[M],"Beginner"),
+  E("Glute-Kickback-Machine","Glute Kickback Machine","آلة الرفصة الخلفية","Glutes",["glutes"],["hamstrings"],[M],"Beginner"),
+  E("HIP-ADDUCTION-MACHINE","Hip Adduction Machine","آلة تقريب الفخذين","Adductors",["adductors"],["glutes"],[M],"Beginner"),
+  E("HiP-ABDUCTION-MACHINE","Hip Abduction Machine","آلة تبعيد الفخذين","Glutes",["glutes"],["adductors"],[M],"Beginner"),
+  E("Hack-Machine-One-Leg-Calf-Raise","One-Leg Calf Raise (Hack Machine)","رفع السمانة برجل واحدة (آلة هاك)","Calves",["calves"],[],[M],"Beginner"),
+  E("Hack-Squat-Calf-Raise","Calf Raise (Hack Squat)","رفع السمانة (سكوات هاك)","Calves",["calves"],["quadriceps"],[M],"Beginner"),
+  E("Hand-Gripper","Hand Gripper","قابض اليد","Forearms",["forearms"],[],["Hand Gripper"],"Beginner"),
+  E("Hands-Bike","Hands Bike (Arm Ergometer)","دراجة الأذرع","Cardio",["deltoids","forearms"],["abs","quadriceps"],[C],"Beginner"),
+  E("Hip-Thrust-Machine","Hip Thrust Machine","آلة دفع الورك","Glutes",["glutes"],["hamstrings"],[M],"Beginner"),
+  E("Hip-Thrust-on-The-Leg-Extension-Machine","Hip Thrust (Leg Extension Machine)","دفع الورك (جهاز فرد الساق)","Glutes",["glutes"],["hamstrings"],[M],"Beginner"),
+  E("Incline-Chest-Fly-Machine","Incline Chest Fly Machine","آلة تفتيح الصدر المائل","Chest",["pectorals"],["deltoids"],[M],"Beginner"),
+  E("Incline-Chest-Press-Machine","Incline Chest Press Machine","آلة الضغط الصدري المائل","Chest",["pectorals"],["deltoids","triceps"],[M],"Beginner"),
+  E("Incline-Treadmill","Incline Treadmill","الجري بميل على الممشى","Cardio",["quadriceps","calves","glutes"],["hamstrings","abs"],[C],"Intermediate"),
+  E("Inner-Chest-Press-Machine","Inner Chest Press Machine","آلة الضغط للصدر الداخلي","Chest",["pectorals"],["triceps"],[M],"Beginner"),
+  E("LEG-EXTENSION","Leg Extension","فرد الساق","Quads",["quadriceps"],[],[M],"Beginner"),
+  E("Lateral-Raise-Machine","Lateral Raise Machine","آلة الرفع الجانبي للكتف","Shoulders",["deltoids"],["traps"],[M],"Beginner"),
+  E("Leg-Curl","Lying Leg Curl","تجعيد الساق مستلقياً","Hamstrings",["hamstrings"],["calves"],[M],"Beginner"),
+  E("Leg-Press-Calf-Raise","Calf Raise (Leg Press)","رفع السمانة (جهاز الضغط)","Calves",["calves"],["quadriceps"],[M],"Beginner"),
+  E("Leg-Press","Leg Press","الضغط بالأرجل","Quads",["quadriceps"],["glutes","hamstrings"],[M],"Beginner"),
+  E("Lever-Assisted-Leg-Press","Assisted Leg Press","الضغط بالأرجل بالمُساعدة","Quads",["quadriceps"],["glutes","hamstrings"],[M],"Beginner"),
+  E("Lever-Biceps-Curl","Biceps Curl (Lever)","تجعيد البايسبس (آلة)","Biceps",["biceps"],["forearms"],[M],"Beginner"),
+  E("Lever-Cable-Rear-Pulldown","Rear Pulldown (Lever)","السحب الخلفي (آلة)","Back",["lats"],["traps","deltoids"],[M],"Intermediate"),
+  E("Lever-Chest-Press","Chest Press (Lever)","الضغط الصدري (آلة)","Chest",["pectorals"],["deltoids","triceps"],[M],"Beginner"),
+  E("Lever-Crossovers","Cable Crossovers (Lever)","التقاطع الصدري (آلة)","Chest",["pectorals"],["deltoids"],[M],"Beginner"),
+  E("Lever-Deadlift","Deadlift (Lever)","الرفعة الميتة (آلة)","Back",["lowerback","glutes","hamstrings"],["traps","quadriceps","forearms"],[M],"Advanced"),
+  E("Lever-Decline-Chest-Press","Decline Chest Press (Lever)","الضغط الصدري المنحدر (آلة)","Chest",["pectorals"],["triceps","deltoids"],[M],"Beginner"),
+  E("Lever-Donkey-Calf-Raise","Donkey Calf Raise (Lever)","رفع السمانة الحماري (آلة)","Calves",["calves"],[],[M],"Beginner"),
+  E("Lever-Gripless-Shrug","Gripless Shrug (Lever)","هزّة الكتف بلا قبضة (آلة)","Shoulders",["traps"],["deltoids"],[M],"Beginner"),
+  E("Lever-High-Row","High Row (Lever)","التجديف العالي (آلة)","Back",["lats","traps"],["biceps","deltoids"],[M],"Beginner"),
+  E("Lever-Horizontal-Leg-Press","Horizontal Leg Press","الضغط بالأرجل الأفقي","Quads",["quadriceps"],["glutes","hamstrings"],[M],"Beginner"),
+  E("Lever-Incline-Chest-Press","Incline Chest Press (Lever)","الضغط الصدري المائل (آلة)","Chest",["pectorals"],["deltoids","triceps"],[M],"Beginner"),
+  E("Lever-Incline-Hammer-Chest-Press","Incline Hammer Chest Press (Lever)","الضغط الصدري المائل هامر (آلة)","Chest",["pectorals"],["deltoids","triceps"],[M],"Beginner"),
+  E("Lever-Kneeling-Leg-Curl-","Kneeling Leg Curl (Lever)","تجعيد الساق راكعاً (آلة)","Hamstrings",["hamstrings"],["calves"],[M],"Beginner"),
+  E("Lever-Lateral-Raise","Lateral Raise (Lever)","الرفع الجانبي (آلة)","Shoulders",["deltoids"],["traps"],[M],"Beginner"),
+  E("Lever-Lying-Crunch","Lying Crunch (Lever)","تجعيد البطن مستلقياً (آلة)","Core",["abs"],["obliques"],[M],"Beginner"),
+  E("Lever-Neck-Extension-plate-loaded","Neck Extension (Lever)","فرد الرقبة (آلة)","Neck",["traps"],[],[M],"Beginner"),
+  E("Lever-Neck-Right-Side-Flexion-plate-loaded","Neck Side Flexion (Lever)","ميل الرقبة الجانبي (آلة)","Neck",["traps"],[],[M],"Beginner"),
+  E("Lever-One-Arm-Chest-Press","One-Arm Chest Press (Lever)","الضغط الصدري بذراع واحدة (آلة)","Chest",["pectorals"],["triceps","deltoids"],[M],"Beginner"),
+  E("Lever-Overhand-Triceps-Dip","Overhand Triceps Dip (Lever)","متوازي الترايسبس بقبضة فوقية (آلة)","Triceps",["triceps"],["pectorals","deltoids"],[M],"Intermediate"),
+  E("Lever-Preacher-Curl","Preacher Curl (Lever)","تجعيد البايسبس بمسند (آلة)","Biceps",["biceps"],["forearms"],[M],"Beginner"),
+  E("Lever-Pullover-plate-loaded","Pullover (Lever)","البولوفر (آلة)","Back",["lats"],["pectorals","triceps"],[M],"Intermediate"),
+  E("Lever-Reverse-Shoulder-Press","Reverse Shoulder Press (Lever)","ضغط الكتف المعاكس (آلة)","Shoulders",["deltoids"],["traps"],[M],"Intermediate"),
+  E("Lever-Reverse-T-Bar-Row","Reverse T-Bar Row (Lever)","التجديف المعاكس T (آلة)","Back",["lats","traps"],["deltoids","biceps"],[M],"Intermediate"),
+  E("Lever-Seated-Calf-Raise","Seated Calf Raise (Lever)","رفع السمانة جالساً (آلة)","Calves",["calves"],[],[M],"Beginner"),
+  E("Lever-Seated-Twist","Seated Twist (Lever)","اللف الجذعي جالساً (آلة)","Core",["obliques"],["abs"],[M],"Beginner"),
+  E("Lever-Shoulder-Press-Hammer-Grip","Shoulder Press Hammer Grip (Lever)","ضغط الكتف بقبضة هامر (آلة)","Shoulders",["deltoids"],["triceps","traps"],[M],"Beginner"),
+  E("Lever-Shoulder-Press","Shoulder Press (Lever)","ضغط الكتف (آلة)","Shoulders",["deltoids"],["triceps","traps"],[M],"Beginner"),
+  E("Lever-Shrug","Shrug (Lever)","هزّة الكتف (آلة)","Shoulders",["traps"],["forearms"],[M],"Beginner"),
+  E("Lever-Side-Hip-Abduction","Side Hip Abduction (Lever)","تبعيد الفخذين جانبياً (آلة)","Glutes",["glutes"],["adductors"],[M],"Beginner"),
+  E("Lever-Side-Hip-Adduction","Side Hip Adduction (Lever)","تقريب الفخذين جانبياً (آلة)","Adductors",["adductors"],["glutes"],[M],"Beginner"),
+  E("Lever-Single-Leg-Curl","Single Leg Curl (Lever)","تجعيد الساق برجل واحدة (آلة)","Hamstrings",["hamstrings"],["calves"],[M],"Beginner"),
+  E("Lever-Standing-Hip-Extension","Standing Hip Extension (Lever)","فرد الورك واقفاً (آلة)","Glutes",["glutes"],["hamstrings"],[M],"Beginner"),
+  E("Lever-Standing-Leg-Raise","Standing Leg Raise (Lever)","رفع الساق واقفاً (آلة)","Core",["abs"],["quadriceps"],[M],"Beginner"),
+  E("Lever-Standing-Rear-Kick","Standing Rear Kick (Lever)","الركل الخلفي واقفاً (آلة)","Glutes",["glutes"],["hamstrings"],[M],"Beginner"),
+  E("Lever-T-bar-Row","T-Bar Row (Lever)","التجديف T (آلة)","Back",["lats","traps"],["biceps","lowerback"],[M],"Intermediate"),
+  E("Lever-Tricep-Extension","Tricep Extension (Lever)","فرد الترايسبس (آلة)","Triceps",["triceps"],[],[M],"Beginner"),
+  E("Lying-Chest-Press-Machine","Lying Chest Press Machine","آلة الضغط الصدري مستلقياً","Chest",["pectorals"],["triceps","deltoids"],[M],"Beginner"),
+  E("Nordic-Hamstring-Curl","Nordic Hamstring Curl","تجعيد الفخذ الخلفي النورديك","Hamstrings",["hamstrings"],["glutes"],["Bodyweight"],"Advanced"),
+  E("Pec-Deck-Fly","Pec Deck Fly","تفتيح الصدر (بك ديك)","Chest",["pectorals"],["deltoids"],[M],"Beginner"),
+  E("Pendulum-Squat","Pendulum Squat","سكوات البندول","Quads",["quadriceps"],["glutes","hamstrings"],[M],"Intermediate"),
+  E("Plate-Loaded-Seated-Row","Seated Row (Plate Loaded)","التجديف جالساً (أوزان)","Back",["lats","traps"],["biceps"],[M],"Beginner"),
+  E("Plate-Loaded-Shoulder-Press","Shoulder Press (Plate Loaded)","ضغط الكتف (أوزان)","Shoulders",["deltoids"],["triceps"],[M],"Beginner"),
+  E("Rear-Delt-Machine-Flys","Rear Delt Flys (Machine)","تفتيح الكتف الخلفي (آلة)","Shoulders",["deltoids"],["traps"],[M],"Beginner"),
+  E("Recumbent-Exercise-Bike","Recumbent Exercise Bike","الدراجة بظهر مسنود","Cardio",["quadriceps"],["calves","glutes"],[C],"Beginner"),
+  E("Reverse-Grip-Machine-Row","Reverse-Grip Machine Row","التجديف بقبضة معاكسة (آلة)","Back",["lats","traps"],["biceps"],[M],"Beginner"),
+  E("Reverse-Hack-Squat","Reverse Hack Squat","سكوات هاك معاكس","Quads",["quadriceps"],["glutes","hamstrings"],[M],"Intermediate"),
+  E("Reverse-Hyperextension-Machine","Reverse Hyperextension (Machine)","الفرد الخلفي المعاكس (آلة)","Back",["lowerback","glutes"],["hamstrings"],[M],"Intermediate"),
+  E("Reverse-grip-Pull-up","Reverse-Grip Pull-Up","العقلة بقبضة معاكسة","Biceps",["biceps"],["lats","traps"],["Pull-up Bar","Bodyweight"],"Intermediate"),
+  E("Rowing-Machine","Rowing Machine","جهاز التجديف","Cardio",["lats","quadriceps"],["traps","hamstrings","forearms","abs","glutes"],[C],"Intermediate"),
+  E("Seated-Ab-Crunch-Machine","Seated Ab Crunch Machine","آلة تجعيد البطن جالساً","Core",["abs"],["obliques"],[M],"Beginner"),
+  E("Seated-Calf-Press-on-Leg-Press-Machine","Seated Calf Press (Leg Press)","رفع السمانة (بالضغط جالساً)","Calves",["calves"],["quadriceps"],[M],"Beginner"),
+  E("Seated-Crunch-Machine","Seated Crunch Machine","آلة التجعيد جالساً","Core",["abs"],["obliques"],[M],"Beginner"),
+  E("Seated-Leg-Curl","Seated Leg Curl","تجعيد الساق جالساً","Hamstrings",["hamstrings"],["calves"],[M],"Beginner"),
+  E("Seated-Row-Machine","Seated Row Machine","آلة التجديف جالساً","Back",["lats","traps"],["biceps","forearms"],[M],"Beginner"),
+  E("Single-Calf-Raise-on-Leg-Press-Machine","Single Calf Raise (Leg Press)","رفع السمانة برجل (بالضغط)","Calves",["calves"],[],[M],"Beginner"),
+  E("Single-Leg-Extension","Single Leg Extension","فرد الساق برجل واحدة","Quads",["quadriceps"],[],[M],"Beginner"),
+  E("Single-Leg-Press","Single Leg Press","الضغط بالأرجل برجل واحدة","Quads",["quadriceps"],["glutes","hamstrings"],[M],"Beginner"),
+  E("Ski-Ergometer","Ski Ergometer","جهاز التزلج","Cardio",["lats","traps"],["forearms","abs"],[C],"Intermediate"),
+  E("Sled-Hack-Squat","Sled Hack Squat","سكوات هاك بالمزلج","Quads",["quadriceps"],["glutes","hamstrings"],[M],"Intermediate"),
+  E("Smith-Machine-Behind-Neck-Press","Behind-Neck Press (Smith)","ضغط خلف الرقبة (سميث)","Shoulders",["deltoids"],["triceps","traps"],[M],"Intermediate"),
+  E("Smith-Machine-Bench-Press","Bench Press (Smith)","بنش برس (سميث)","Chest",["pectorals"],["deltoids","triceps"],[M],"Beginner"),
+  E("Smith-Machine-Bent-Over-Row","Bent-Over Row (Smith)","تجديف منحنياً (سميث)","Back",["lats","traps"],["biceps","lowerback"],[M],"Intermediate"),
+  E("Smith-Machine-Decline-Bench-Press","Decline Bench Press (Smith)","بنش برس منحدر (سميث)","Chest",["pectorals"],["triceps","deltoids"],[M],"Beginner"),
+  E("Smith-Machine-Good-Morning","Good Morning (Smith)","جود مورنينغ (سميث)","Hamstrings",["hamstrings"],["lowerback","glutes"],[M],"Intermediate"),
+  E("Smith-Machine-Hex-Press","Hex Press (Smith)","ضغط هكس (سميث)","Chest",["pectorals"],["triceps"],[M],"Beginner"),
+  E("Smith-Machine-Hip-Thrust","Hip Thrust (Smith)","دفع الورك (سميث)","Glutes",["glutes"],["hamstrings","abs"],[M],"Beginner"),
+  E("Smith-Machine-Incline-Bench-Press","Incline Bench Press (Smith)","بنش برس مائل (سميث)","Chest",["pectorals"],["deltoids","triceps"],[M],"Beginner"),
+  E("Smith-Machine-Leg-Press","Leg Press (Smith)","الضغط بالأرجل (سميث)","Quads",["quadriceps"],["glutes","hamstrings"],[M],"Beginner"),
+  E("Smith-Machine-Lunge","Lunge (Smith)","الطعنة (سميث)","Quads",["quadriceps","glutes"],["hamstrings","calves"],[M],"Intermediate"),
+  E("Smith-Machine-Reverse-Kickback","Reverse Kickback (Smith)","الركل الخلفي للكتف (سميث)","Shoulders",["deltoids"],["traps"],[M],"Intermediate"),
+  E("Smith-Machine-Shoulder-Press","Shoulder Press (Smith)","ضغط الكتف (سميث)","Shoulders",["deltoids"],["triceps","traps"],[M],"Beginner"),
+  E("smith-machine-shrug","Shrug (Smith)","هزّة الكتف (سميث)","Shoulders",["traps"],["forearms"],[M],"Beginner"),
+  E("smith-machine-squat","Squat (Smith)","سكوات (سميث)","Quads",["quadriceps","glutes"],["lowerback","hamstrings","abs"],[M],"Intermediate"),
+  E("Squat-on-The-Abductor-Machine","Squat (Abductor Machine)","سكوات (بآلة التبعيد)","Glutes",["glutes"],["quadriceps"],[M],"Beginner"),
+  E("Standing-Single-Leg-Curl-Machine","Standing Single Leg Curl","تجعيد الساق برجل واقفاً","Hamstrings",["hamstrings"],["calves"],[M],"Beginner"),
+  E("Standing-Smith-Machine-Shoulder-Press","Standing Shoulder Press (Smith)","ضغط الكتف واقفاً (سميث)","Shoulders",["deltoids"],["triceps","traps"],[M],"Intermediate"),
+  E("Standing-Twist-Machine","Standing Twist Machine","آلة اللف واقفاً","Core",["obliques"],["abs"],[M],"Beginner"),
+  E("Stationary-Bike-Run","Stationary Bike Run","الجري على الدراجة الثابتة","Cardio",["quadriceps","calves"],["glutes","abs"],[C],"Intermediate"),
+  E("Treadmill-","Treadmill","الممشى (السير)","Cardio",["quadriceps","calves"],["glutes","hamstrings","abs"],[C],"Beginner"),
+  E("Triceps-Dip-Machine","Triceps Dip Machine","آلة متوازي الترايسبس","Triceps",["triceps"],["pectorals","deltoids"],[M],"Beginner"),
+  E("Triceps-Dips","Triceps Dips","متوازي الترايسبس","Triceps",["triceps"],["pectorals","deltoids"],["Dip Station","Bodyweight"],"Intermediate"),
+  E("Triceps-Extension-Machine","Triceps Extension Machine","آلة فرد الترايسبس","Triceps",["triceps"],[],[M],"Beginner"),
+  E("Twisting-Hyperextension","Twisting Hyperextension","الفرد الخلفي مع لف","Core",["lowerback"],["obliques","glutes"],["Bench","Bodyweight"],"Intermediate"),
+  E("Vibrate-Plate-Standing","Vibration Plate Standing","الوقوف على لوح الاهتزاز","Cardio",["quadriceps","calves"],["abs","forearms"],[C],"Beginner"),
+  E("Walk-Wave-Machine","Walk Wave Machine","جهاز المشي الموجي","Cardio",["quadriceps","calves"],["glutes","abs"],[C],"Beginner"),
+  E("Walking-on-Stepmill","Stepmill Walk","المشي على الدرج المتحرك","Cardio",["quadriceps","glutes"],["calves","hamstrings"],[C],"Intermediate"),
+  E("Weighted-Back-Extension","Weighted Back Extension","فرد الظهر بوزن","Core",["lowerback"],["glutes","hamstrings"],["Bench","Bodyweight"],"Intermediate"),
+  E("Weighted-Pull-up","Weighted Pull-Up","العقلة بوزن إضافي","Back",["lats"],["biceps","traps","forearms"],["Pull-up Bar","Bodyweight"],"Advanced"),
+  E("belt-squat","Belt Squat","سكوات الحزام","Quads",["quadriceps","glutes"],["hamstrings","adductors"],[M],"Intermediate"),
+  E("seated-back-extension","Seated Back Extension","فرد الظهر جالساً","Core",["lowerback"],["glutes"],[M],"Beginner"),
+];
+
+/* ================= PLANNER DATA ================= */
+const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const DAY_EN = {Mon:"Monday",Tue:"Tuesday",Wed:"Wednesday",Thu:"Thursday",Fri:"Friday",Sat:"Saturday",Sun:"Sunday"};
+const DAY_AR = {Mon:"الاثنين",Tue:"الثلاثاء",Wed:"الأربعاء",Thu:"الخميس",Fri:"الجمعة",Sat:"السبت",Sun:"الأحد"};
+const FOCUS = {
+  rest:  {icon:"🛌", en:"Rest Day",        ar:"يوم راحة",            desc:"Recovery — light stretching, walking and good sleep." },
+  full:  {icon:"💪", en:"Full Body",       ar:"كامل الجسم",          desc:"Hit every major muscle group in one session." },
+  upper: {icon:"🔝", en:"Upper Body",      ar:"الجسم العلوي",        desc:"Chest, back, shoulders and arms." },
+  lower: {icon:"🦵", en:"Lower Body",      ar:"الجسم السفلي",        desc:"Quads, hamstrings, glutes and calves." },
+  push:  {icon:"🏋️", en:"Push Day",        ar:"يوم الدفع",           desc:"Chest, shoulders and triceps." },
+  pull:  {icon:"🪝", en:"Pull Day",        ar:"يوم السحب",           desc:"Lats, traps and biceps." },
+  legs:  {icon:"🦿", en:"Legs",            ar:"الأرجل",              desc:"Quads, hamstrings, glutes and calves." },
+  arms:  {icon:"🤜", en:"Arms & Shoulders", ar:"الذراعان والأكتاف",   desc:"Biceps, triceps and deltoids." },
+  core:  {icon:"🎯", en:"Core",            ar:"الجذع",               desc:"Abs, obliques and lower back." },
+  cardio:{icon:"🏃", en:"Cardio",          ar:"الكارديو",            desc:"Heart, lungs and muscular endurance." },
+};
+
+const KG_PER_LB = 2.20462;
+const round1 = v => Math.round(v*10)/10;
+const kgToLbs = kg => round1(kg*KG_PER_LB);
+const lbsToKg = lbs => round1(lbs/KG_PER_LB);
+
+/* ================= WEEK HELPERS ================= */
+function mondayOf(date){
+  const d = new Date(date); d.setHours(0,0,0,0);
+  const day = (d.getDay()+6)%7; d.setDate(d.getDate()-day); return d;
+}
+const fmtKey = d => d.toISOString().slice(0,10);
+const curWeekKey = () => fmtKey(mondayOf(new Date()));
+const prevWeekKey = () => { const d = mondayOf(new Date()); d.setDate(d.getDate()-7); return fmtKey(d); };
+function freshWeek(){ return Object.fromEntries(DAYS.map(d=>[d,{focus:"rest",ex:[]}])); }
+
+/* ================= STATE ================= */
+const libState = { q:"", eq:"All", group:"All", muscleF:null };
+const planState = { day:"Mon" };
+let PLAN = load();
+function load(){
+  try{
+    const raw = JSON.parse(localStorage.getItem("gymPlanV1"));
+    if(raw && raw.weeks){
+      if(!raw.weeks[curWeekKey()]) raw.weeks[curWeekKey()] = freshWeek();
+      return raw;
+    }
+    if(raw && raw.days) return { weeks: { [curWeekKey()]: raw.days } }; // migrate old format
+  }catch(e){}
+  return { weeks: { [curWeekKey()]: freshWeek() } };
+}
+function save(){ localStorage.setItem("gymPlanV1", JSON.stringify(PLAN)); }
+const curWeek = () => PLAN.weeks[curWeekKey()];
+const byId = id => EXERCISES.find(e=>e.id===id);
+const gifURL = id => `gifs/${encodeURIComponent(id)}.gif`;
+const diffDot = d => ({Beginner:"beg",Intermediate:"int",Advanced:"adv"})[d] || "int";
+const ar = t => `<span class="ar" dir="rtl">${t}</span>`;
+function filtered(){
+  const q = libState.q.toLowerCase();
+  return EXERCISES.filter(e=>{
+    const matchQ = (e.name+" "+e.ar+" "+e.group+" "+e.equipment.join(" ")).toLowerCase().includes(q);
+    const matchEq = libState.eq==="All" || e.equipment.includes(libState.eq);
+    const matchG = libState.group==="All" || e.group===libState.group;
+    const matchM = !libState.muscleF || e.primary.includes(libState.muscleF) || e.secondary.includes(libState.muscleF);
+    return matchQ && matchEq && matchG && matchM;
+  });
+}
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.innerHTML = msg; t.classList.add("show");
+  clearTimeout(t._h); t._h = setTimeout(()=>t.classList.remove("show"), 2600);
+}
+
+/* ================= VIEW TABS ================= */
+document.querySelectorAll(".view-tab").forEach(t=>t.onclick=()=>{
+  document.querySelectorAll(".view-tab").forEach(x=>x.classList.remove("active"));
+  t.classList.add("active");
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+  document.getElementById(t.dataset.view+"View").classList.add("active");
+  if(t.dataset.view==="summary") renderSummary();
+});
+
+/* ================= LIBRARY : CHIPS ================= */
+function renderLibChips(){
+  const mc = document.getElementById("muscleChips");
+  mc.innerHTML = `<span class="filter-label">Muscle:</span>` +
+    Object.entries(MUSCLES).map(([id,m])=>
+      `<span class="chip muscle ${libState.muscleF===id?"active":""}" data-m="${id}">${m.en.split(" (")[0]} · ${ar(m.ar)}</span>`).join("");
+  mc.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{
+    libState.muscleF = libState.muscleF===c.dataset.m ? null : c.dataset.m; renderLibChips(); renderGrid();
+  });
+  const gc = document.getElementById("groupChips");
+  gc.innerHTML = `<span class="filter-label">Area:</span>` +
+    ["All",...GROUPS].map(g=>`<span class="chip ${libState.group===g?"active":""}" data-g="${g}">${g==="All"?"All · الكل":g+" · "+ar(GROUP_AR[g])}</span>`).join("");
+  gc.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{ libState.group=c.dataset.g; renderLibChips(); renderGrid(); });
+  const ec = document.getElementById("eqChips");
+  ec.innerHTML = `<span class="filter-label">Equipment:</span>` +
+    ["All",...Object.keys(EQ)].map(t=>`<span class="chip ${libState.eq===t?"active":""}" data-eq="${t}">${t==="All"?"All · الكل":t+" · "+ar(EQ[t].ar)}</span>`).join("");
+  ec.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{ libState.eq=c.dataset.eq; renderLibChips(); renderGrid(); });
+}
+
+/* ================= LIBRARY : GRID ================= */
+function renderGrid(){
+  const items = filtered();
+  document.getElementById("countLine").innerHTML =
+    `<b>${items.length} exercise${items.length===1?"":"s"} shown</b> · ${EXERCISES.length} total`;
+  document.getElementById("grid").innerHTML = items.map(e=>{
+    return `<div class="card" data-id="${e.id}">
+      <div class="thumb"><img loading="lazy" src="${gifURL(e.id)}" alt="${e.name}"></div>
+      <div class="body">
+        <div class="name">${e.name}</div>
+        <div class="name-ar">${ar(e.ar)}</div>
+        <span class="badge">${e.group} · ${ar(GROUP_AR[e.group])}</span>
+        <div class="tip">${TIPS[e.primary[0]]||""}</div>
+      </div>
+    </div>`;
+  }).join("");
+  document.querySelectorAll("#grid .card").forEach(c=>c.onclick=()=>openDetail(c.dataset.id));
+}
+
+/* ================= DETAIL MODAL ================= */
+function openDetail(id){
+  const e = byId(id);
+  const chip = (m,cls)=>`<span class="m-chip ${cls}"><i></i>${MUSCLES[m].en.split(" (")[0]} · ${ar(MUSCLES[m].ar)}</span>`;
+  document.getElementById("detailBody").innerHTML = `
+    <div class="detail-grid">
+      <div class="big-thumb"><img src="${gifURL(e.id)}" alt="${e.name}"></div>
+      <div class="detail-info">
+        <h3>${e.name}</h3>
+        <div class="name-ar">${ar(e.ar)}</div>
+        <span class="badge ${diffDot(e.diff)}">${e.diff.toUpperCase()}</span>
+        <div class="section"><div class="lbl">🎯 Primary muscles · العضلات الأساسية</div>${e.primary.map(m=>chip(m,"p")).join("")}</div>
+        <div class="section"><div class="lbl">🔸 Secondary muscles · العضلات المساعدة</div>${e.secondary.length?e.secondary.map(m=>chip(m,"s")).join(""):"<span style='color:var(--muted);font-size:12px'>None · لا شيء</span>"}</div>
+        <div class="section"><div class="lbl">🛠 Equipment · الأجهزة</div>${e.equipment.map(t=>
+          `<span class="eq-chip"><i style="background:${EQ_COLORS[t]}"></i>${t} · ${ar(EQ[t].ar)}</span>`).join("")}</div>
+        <div class="section" style="font-size:12.5px;color:#b9c2d4;line-height:1.55;">💡 ${TIPS[e.primary[0]]||""}</div>
+        <button class="addfromdetail" onclick="addToDay('${e.id.replace(/'/g,"\\'")}')">＋ Add to ${DAY_EN[planState.day]} · ${ar(DAY_AR[planState.day])}</button>
+      </div>
+    </div>`;
+  document.getElementById("detailOverlay").classList.add("open");
+}
+
+/* ================= PLANNER : DAYS BAR ================= */
+function renderDays(){
+  const todayIdx = (new Date().getDay() + 6) % 7;
+  document.getElementById("daysBar").innerHTML = DAYS.map((d,i)=>`
+    <div class="day-btn ${planState.day===d?"selected":""} ${i===todayIdx?"today":""}" data-day="${d}">
+      <div class="circle">${d[0]}</div>
+      <span class="dname">${d} · ${ar(DAY_AR[d])}</span>
+      <span class="dcount">${curWeek()[d].ex.length} ex</span>
+    </div>`).join("");
+  document.querySelectorAll(".day-btn").forEach(b=>b.onclick=()=>{
+    planState.day = b.dataset.day; renderDays(); renderDayPanel();
+  });
+}
+
+/* ================= PLANNER : DAY BANNER + EXERCISES ================= */
+function renderDayPanel(){
+  const week = curWeek();
+  const day = week[planState.day];
+  const f = FOCUS[day.focus] || FOCUS.rest;
+  document.getElementById("weekLabel").innerHTML =
+    `Week of ${curWeekKey()} · ${ar("أسبوع")}` + ` <span class="ar" dir="rtl">${curWeekKey()}</span>`;
+  document.getElementById("dayBanner").innerHTML = `
+    <div class="icon">${f.icon}</div>
+    <div class="txt">
+      <h3>${DAY_EN[planState.day]} · ${ar(DAY_AR[planState.day])} — ${f.en} · ${ar(f.ar)}</h3>
+      <p>${f.desc}</p>
+    </div>
+    <div class="focus-chips" id="focusChips">
+      ${Object.entries(FOCUS).map(([k,v])=>`<span class="chip ${day.focus===k?"active":""}" data-f="${k}">${v.icon} ${v.en} · ${ar(v.ar)}</span>`).join("")}
+    </div>
+    <button class="add-ex-btn" onclick="openPicker()">＋ Add · إضافة</button>`;
+  document.querySelectorAll("#focusChips .chip").forEach(c=>c.onclick=()=>{
+    day.focus = c.dataset.f; save(); renderDayPanel();
+  });
+
+  const box = document.getElementById("dayExercises");
+  if(day.ex.length===0){
+    box.innerHTML = `<div style="text-align:center;color:var(--muted);padding:36px 0;font-size:14px;">
+      No exercises yet for ${DAY_EN[planState.day]}.<br>
+      <span class="ar" dir="rtl">لا توجد تمارين بعد لـ${ar(DAY_AR[planState.day])}</span><br><br>
+      <button class="add-ex-btn" onclick="openPicker()">＋ Add your first exercise · أضف أول تمرين</button></div>`;
+    return;
+  }
+  box.innerHTML = day.ex.map((ex,i)=>{
+    const e = byId(ex.id) || {name:"(missing)",ar:"—",group:"—",primary:[],secondary:[],equipment:[],diff:"Beginner"};
+    const areaSub = e.primary.map(m=>`${MUSCLES[m].en.split(" (")[0]} · ${ar(MUSCLES[m].ar)}`).join("، ");
+    const eqLine = e.equipment.map(t=>`${t} · ${ar(EQ[t].ar)}`).join(" · ");
+    return `<div class="plan-ex" data-i="${i}">
+      <div class="ex-top">
+        <div class="area-line">
+          🎯 ${e.group} · ${ar(GROUP_AR[e.group]||"—")}
+          <span class="sub">${areaSub||"—"}</span>
+        </div>
+        <span class="badge ${diffDot(e.diff)}" style="margin:0">${e.diff.toUpperCase()}</span>
+        <button class="del-ex" onclick="removeEx(${i})">✕ Remove · إزالة</button>
+      </div>
+      <div class="gifbox" onclick="openDetail('${ex.id.replace(/'/g,"\\'")}')"><img loading="lazy" src="${gifURL(ex.id)}" alt=""></div>
+      <div class="machine-line">${e.name}<span class="ar" dir="rtl">${e.ar}</span></div>
+      <div class="mach-eq">🛠 ${eqLine}</div>
+      <div class="sets-box">
+        <div class="sets-head">
+          <span class="lbl">Sets & Weight · ${ar("المجموعات والوزن")}</span>
+          <button class="addset-btn" onclick="addSet(${i})">＋ Add set · ${ar("إضافة مجموعة")}</button>
+        </div>
+        ${ex.sets.map((s,si)=>setRowHTML(s,si,i)).join("")}
+      </div>
+      <div class="note-box">
+        <div class="lbl">📝 Note · ${ar("ملاحظة")}</div>
+        <textarea placeholder="Add a note… · ${ar("أضف ملاحظة…")}" oninput="setNote(${i}, this.value)">${ex.note||""}</textarea>
+        <div class="photo-row">
+          <label class="photo-btn">📷 Add picture · ${ar("إضافة صورة")}<input type="file" accept="image/*" style="display:none" onchange="setPhoto(${i}, this)"></label>
+          ${ex.photo ? `<div class="photo-thumb"><img src="${ex.photo}" onclick="window.open(this.src)"><button class="rm" onclick="clearPhoto(${i})">✕</button></div>` : ""}
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function setRowHTML(s, si, exIdx){
+  const unit = s.unit || "kg";
+  const val = unit==="kg" ? s.kg : s.lbs;
+  const otherVal = unit==="kg" ? s.lbs : s.kg;
+  const shown = otherVal!=="" && otherVal!==undefined && otherVal!==null ? otherVal : "";
+  return `<div class="set-row" data-si="${si}">
+    <span class="set-num">Set ${si+1}</span>
+    <div class="unit-tabs">
+      <button class="utab ${unit==="kg"?"active":""}" onclick="setUnit(${exIdx},${si},'kg')">KG</button>
+      <button class="utab ${unit==="lbs"?"active":""}" onclick="setUnit(${exIdx},${si},'lbs')">LBS</button>
+    </div>
+    <input type="number" step="0.5" min="0" placeholder="${unit}" value="${val??""}"
+      oninput="setWeight(${exIdx},${si},'${unit}', this.value)">
+    <div class="equiv">${shown!==""?shown:"—"}<small>${unit==="kg"?"LBS":"KG"}</small></div>
+    <button class="del-set" title="Remove set" onclick="delSet(${exIdx},${si})">🗑</button>
+  </div>`;
+}
+
+/* ================= PLANNER : ACTIONS ================= */
+function newSet(unit){ return {unit, kg:"", lbs:""}; }
+function addSet(i){ curWeek()[planState.day].ex[i].sets.push(newSet("kg")); save(); renderDayPanel(); }
+function delSet(i,si){
+  const ex = curWeek()[planState.day].ex[i];
+  ex.sets.splice(si,1); if(ex.sets.length===0) ex.sets.push(newSet("kg"));
+  save(); renderDayPanel();
+}
+function setUnit(i,si,unit){
+  curWeek()[planState.day].ex[i].sets[si].unit = unit; save(); renderDayPanel();
+}
+function setWeight(i,si,unit,val){
+  const s = curWeek()[planState.day].ex[i].sets[si];
+  const num = val===""?"":parseFloat(val);
+  if(unit==="kg"){ s.kg = num; s.lbs = num===""?"":kgToLbs(num); }
+  else { s.lbs = num; s.kg = num===""?"":lbsToKg(num); }
+  save();
+  const row = document.querySelector(`.plan-ex[data-i="${i}"] .set-row[data-si="${si}"] .equiv`);
+  if(row){
+    const other = unit==="kg" ? (num===""?"":kgToLbs(num)) : (num===""?"":lbsToKg(num));
+    row.innerHTML = (other===""?"—":other) + `<small>${unit==="kg"?"LBS":"KG"}</small>`;
+  }
+}
+function setNote(i, val){ curWeek()[planState.day].ex[i].note = val; save(); }
+function clearPhoto(i){ curWeek()[planState.day].ex[i].photo = null; save(); renderDayPanel(); }
+function setPhoto(i, input){
+  const file = input.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const max = 900, sc = Math.min(1, max/Math.max(img.width,img.height));
+      const cv = document.createElement("canvas");
+      cv.width = img.width*sc; cv.height = img.height*sc;
+      cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height);
+      curWeek()[planState.day].ex[i].photo = cv.toDataURL("image/jpeg",0.82);
+      save(); renderDayPanel();
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function removeEx(i){ curWeek()[planState.day].ex.splice(i,1); save(); renderDayPanel(); renderDays(); }
+function addToDay(id){
+  curWeek()[planState.day].ex.push({ id, sets:[newSet("kg")], note:"", photo:null });
+  save(); renderDayPanel(); renderDays();
+  closeModal("detailOverlay");
+}
+
+/* ================= COPY LAST WEEK ================= */
+function copyLastWeek(){
+  const prev = PLAN.weeks[prevWeekKey()];
+  if(!prev){ toast("No saved plan for last week · " + ar("لا توجد خطة محفوظة للأسبوع الماضي")); return; }
+  PLAN.weeks[curWeekKey()] = JSON.parse(JSON.stringify(prev));
+  save(); renderDays(); renderDayPanel(); renderSummary();
+  toast("Last week's plan copied ✓ · " + ar("تم نسخ خطة الأسبوع الماضي ✓"));
+}
+
+/* ================= SUMMARY / PRINT VIEW ================= */
+function renderSummary(){
+  document.getElementById("sumWeek").innerHTML =
+    `Weekly Summary · ${ar("الملخص الأسبوعي")} — <span class="ar" dir="rtl">${ar("أسبوع")}</span> ${curWeekKey()}`;
+  const week = curWeek();
+  document.getElementById("summaryBody").innerHTML = DAYS.map(d=>{
+    const day = week[d], f = FOCUS[day.focus] || FOCUS.rest;
+    const exHtml = day.ex.length===0
+      ? `<div class="sum-rest">Rest / no exercises · ${ar("راحة / لا توجد تمارين")}</div>`
+      : day.ex.map(ex=>{
+          const e = byId(ex.id) || {name:"(missing)",ar:"—",group:"—",equipment:[],primary:[]};
+          const sets = ex.sets.map((s,si)=>{
+            const unit = s.unit||"kg";
+            const val = unit==="kg" ? s.kg : s.lbs;
+            const other = unit==="kg" ? s.lbs : s.kg;
+            const w = val===""||val===undefined ? "—" : val;
+            const o = other===""||other===undefined ? "—" : other;
+            return `<span class="sum-set">Set ${si+1}: ${w} ${unit.toUpperCase()} · ${o} ${unit==="kg"?"LBS":"KG"}</span>`;
+          }).join("");
+          return `<div class="sum-ex">
+            <div class="sthumb"><img loading="lazy" src="${gifURL(ex.id)}" alt=""></div>
+            <div class="sinfo">
+              <div class="sname">${e.name} <small style="color:var(--muted2)">(${e.group} · ${ar(GROUP_AR[e.group]||"—")})</small></div>
+              <div class="sname-ar">${ar(e.ar)}</div>
+              <div class="sum-sets">${sets}</div>
+              ${ex.note ? `<div class="sum-note">📝 ${ex.note}</div>` : ""}
+              ${ex.photo ? `<div class="sum-note-photo"><img src="${ex.photo}"></div>` : ""}
+            </div>
+          </div>`;
+        }).join("");
+    return `<div class="sum-day">
+      <h3>${f.icon} ${DAY_EN[d]} · ${ar(DAY_AR[d])} — ${f.en} · ${ar(f.ar)}</h3>
+      <div class="focus-line">${f.desc} · <span class="ar" dir="rtl">${day.ex.length} ${ar("تمرين")}</span></div>
+      ${exHtml}
+    </div>`;
+  }).join("");
+}
+
+/* ================= PICKER MODAL ================= */
+let pickerAdded = new Set();
+function openPicker(){
+  pickerAdded = new Set(curWeek()[planState.day].ex.map(x=>x.id));
+  document.getElementById("pickerDayName").innerHTML = `${DAY_EN[planState.day]} · ${ar(DAY_AR[planState.day])}`;
+  document.getElementById("pickerSearch").value = "";
+  renderPickerGrid("");
+  document.getElementById("pickerOverlay").classList.add("open");
+}
+function renderPickerGrid(q){
+  q = q.toLowerCase();
+  const items = EXERCISES.filter(e=>(e.name+" "+e.ar+" "+e.group).toLowerCase().includes(q));
+  document.getElementById("pickerGrid").innerHTML = items.map(e=>{
+    const added = pickerAdded.has(e.id);
+    return `<div class="picker-card ${added?"added":""}" data-id="${e.id}">
+      <div class="pt"><img loading="lazy" src="${gifURL(e.id)}" alt=""></div>
+      <div class="pn">${e.name}</div>
+      <div class="pn-ar">${ar(e.ar)}</div>
+      <span class="padd">${added?"✓ Added · تمت الإضافة":"Click to add · اضغط للإضافة"}</span>
+    </div>`;
+  }).join("");
+  document.querySelectorAll("#pickerGrid .picker-card").forEach(c=>c.onclick=()=>{
+    const id = c.dataset.id;
+    if(pickerAdded.has(id)) return;
+    curWeek()[planState.day].ex.push({ id, sets:[newSet("kg")], note:"", photo:null });
+    pickerAdded.add(id);
+    save(); renderPickerGrid(document.getElementById("pickerSearch").value);
+    renderDays();
+  });
+}
+function closeModal(id){ document.getElementById(id).classList.remove("open"); if(id==="pickerOverlay") renderDayPanel(); }
+document.querySelectorAll(".overlay").forEach(o=>o.addEventListener("click", e=>{ if(e.target===o) closeModal(o.id); }));
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") document.querySelectorAll(".overlay.open").forEach(o=>closeModal(o.id)); });
+
+document.getElementById("search").addEventListener("input", e=>{ libState.q=e.target.value; renderGrid(); });
+
+/* ================= INIT ================= */
+renderLibChips(); renderGrid(); renderDays(); renderDayPanel();
+</script>
+</body>
+</html>

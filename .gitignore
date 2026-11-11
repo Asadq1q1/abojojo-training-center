@@ -1,0 +1,8 @@
+# Backup of original watermarked gifs - not needed in the repo
+gifs_original/
+
+# Distribution archive
+*.zip
+
+# macOS junk
+.DS_Store
